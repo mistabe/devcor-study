@@ -22,3 +22,19 @@ Dee DEVCOR O'Reilly Playlist
 
 Paul Beyer DEVCOR O'Reilly Playlist
 <https://learning.oreilly.com/playlists/e9baed1f-599c-434f-ab57-addcc4d7616b/>
+
+URLs that I made the only contents of my bookmark bar all the time I was studying for the exam; 
+
+<https://learning.oreilly.com/library/view/cisco-devcor-350-901/9780137500031/>
+
+<https://www.youtube.com/watch?v=umaFfs0zsdo>
+
+<https://developer.cisco.com/learning/>
+
+<https://developer.cisco.com/site/sandbox/>
+
+<https://www.udemy.com/course/cisco-devnet-professional-350-901-devcor-practice-test/>
+
+<https://www.cbtnuggets.com/blog/cbt-nuggets/new-training-cisco-certified-devnet-professional-devcor-350-901>
+
+<https://app.pluralsight.com/paths/certificate/cisco-devcor-300-901-for-cisco-certified-devnet-professional>
