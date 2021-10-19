@@ -62,3 +62,90 @@ And why end there when you can call something "Hybrid" and do both up/down and o
 
 Monolithism is fond of vertical scaling due to it's architectural nature. Distributed applications are fond of horizontal scaling, but can certainly take advantage of vertical, too. "Peak" horizontal scaling is achieved when distributed applications are "stateless" and do not hold the notion of the connection from the client and back to the server database and are for all intents a "hollow bone".
 
+### 1.3 Evaluate an application design considering high availability and resiliency (including on-premises, hybrid and cloud)
+
+High availability and resiliency are Methodolgies.
+
+Avaiability is the measurement of the system being in an operable state over time. 
+High Availabilty is measured using the expression of 9s. Two nines, three nines, etc. Each extra nine increases availablity. There is an infelction point where cost and complexity become relevant. At the time of writing "five nines" is enough to please most organisations on the planet.
+
+Three principles to achieve high availability;
+
+- Elimination of single points of failure
+- Reliable failover(switchover)
+- Detection of failures as they occur
+
+Calls for stateless data flow design. Use of Clusters is pretty much mandatory.
+
+These methods make applications more resilient;
+
+- Parameter checking
+- Timeouts
+- Asynchronous communication
+- Fan out and use the quickest response
+- Fail fast
+- Circuit breaker
+- Retries
+- Fallback mechanisms
+
+Resilience tries to survive the failure with error handling and correction, while high availability's goal is to detect and work around the problem by replacing a failed component.
+
+### 1.4 Evaluate an application design considering latency and rate limiting
+
+End to end latency has several components;
+
+- Application latency
+- OS and TCP stack latency
+- NIC latency
+- Cable distance latency
+- Port-to-Port latency within each network device along the path
+
+It takes 93ms to push a 1500-byte packet onto an ISDN 128KB interface. 0.5usec on a 25Gbps ethernet interface. Broadly it's at least 100ms in cable latency for a packet to reach the other side of the world.
+
+Latency reduction using CDNs, Geo-replicated services. Pagination to get data in chunks rather than calling all at once. Choices of UDP/TCP - UDP is stateless and is liberated from the TCP three-way handshake. 
+Use API gateways, WAFs and other constructs to:
+
+- Manage REST API calls with 429 "Too many requests" responses
+- DDoS protection
+- Brute force protection - login failure limting
+- Web scraping protection
+
+Token buckets are used for temporal resource consumption. 
+
+### 1.5 Evaluate an application design and implementation considering maintainability
+
+The majority of the cost of software is in maintaining the software, not the initial development.
+Software _maintainability_ pertains to that problem.
+
+- Naming conventions
+- Modularity
+- Version Control
+- OOP
+
+[SOLID](https://en.wikipedia.org/wiki/SOLID) is a principle by our friend "[Uncle Bob](https://en.wikipedia.org/wiki/Robert_C._Martin)" to make software deisgns more understandable, flexible and maintainable.
+
+Broadly, then. Do the following for an easy to _maintain_ application:
+
+- Write consistent, readable code
+- Review and iterate code, often
+- Re-factor to improve understandability
+- Maintain good documentation
+- Use Continuous Integration
+
+For a higher _quality_ application:
+
+- Use naming conventions
+- Style Guides [PEP8](https://www.python.org/dev/peps/pep-0008/)
+- Use docstrings (Python)
+- Be lazy and use shared libraries and tools
+- [Unit Test](https://docs.python.org/3/library/unittest.html)
+
+### 1.6 Evaluate an application design and implementation considering observability
+
+The three pillars of observability are:
+
+- Logs
+- Metrics
+- Tracing
+
+Logs are the most basic, agricultural form of observability tool, aparrently. :(
