@@ -142,10 +142,90 @@ For a higher _quality_ application:
 
 ### 1.6 Evaluate an application design and implementation considering observability
 
-The three pillars of observability are:
+The three pillars of observability (observability pillers) are:
 
 - Logs
 - Metrics
 - Tracing
 
 Logs are the most basic, agricultural form of observability tool, aparrently. :(
+
+Metrics you can associate with SNMP. Interface counters, CPU usage, etc. 
+
+Distributed Tracing is exactly that, distributed through systems through the use of a GUID for each request made so that perormance can be tracked end to end.
+
+Obervability is a system property. These are the facts that must be built into a system to make it trul observable; 
+
+- A complex system is never fully healthy.
+- Distributed systems are very unpredicatable.
+- It's impossible to predict all failure states.
+- Failures need to be addressed at all phases - design, implementation, operation etc.
+- Ease of debugging is critical
+
+### 1.7 Diagnose problems with an application given logs related to an event
+
+Often Syslog is used as a starting point for how to develop the structure of logs.
+
+Capture code with Try/Except (else/finally) I call them "TEEF" said illiterately "Teeth" blocks.
+
+### 1.8 Evaluate choice of database types with respect to application requirements (such as relational, document, graph, columnar, and time series)
+
+Considered possibly _the_ most important decision when designing software.
+The features, positives and benefits of each platform need to be considered. 
+
+Data is ususally structured or unstructured, sometimes semi-structured.
+
+_Transactions_ are a sequence of operations performed by a database as a single logical unit of work.
+
+[ACID](https://en.wikipedia.org/wiki/ACID) describes the following;
+
+- Atomicity
+- Consistency
+- Isolation
+- Durability
+
+[BASE](https://en.wikipedia.org/wiki/Eventual_consistency) is an alternative to ACID which takes a more relaxed and therefore likely cost-effective but higher latency database offering.
+
+A distributed database (BGP, an Excel spreadsheet shared by Co-workers over email) is on muliple nodes connected by a network. The [CAP theorum](https://en.wikipedia.org/wiki/CAP_theorem) states you can have no more than two of the below three following guarantees - note CAP are the first letter of the each guarantee;
+
+- Consistency
+- Availability
+- Partition Tolerance
+
+Partitioning tolerance is a critical requiremnet for a distributed system as no network is safe from failures.
+
+Databases designed with ACID choose consistency over availability and BASE choose availability over consistency. Banks versus Social Media as an example.
+
+NoSQL database or Non-Structured Query Language databases could be document-oriented, graph, column-oriented, key-value, and time-series databases.
+
+Document-oriented - MongoDB
+
+Graph databases are all the rage. Consist of _Nodes_ and _Edges_ (or graphs or relationships). Edges are the key concept in graph databases, representing an abstraction that is not directly implemented in other databases.
+Graph databases are always implemented with another type of database (document, key-value, or a traditioanl relational) that is used to store the graph data. They include [Neo4j](https://neo4j.com/), [OrientDB](https://orientdb.org/) etc.
+
+Column-oriented - [Apache Cassandra](https://cassandra.apache.org/_/index.html), [MariaDB](https://mariadb.org/)
+
+Key-Value databases like [Redis](https://en.wikipedia.org/wiki/Redis) support search only by the key value. 
+
+Time-series databases like [InfluxDB](https://en.wikipedia.org/wiki/InfluxDB) enjoy metrics, events, or measurements that are time-stamped. Typically used for sensor and telemetry data.
+
+### 1.9 Explain architecutural patterns (monolithic, services-oriented, microsservices and event-driven)
+
+Software architectures are costly to change once implemented.
+
+- Functional requirements like the general flow of operation and the architecture pattern.
+- Non-functional requirements like the "Ops" things of reliability, operability, performance efficiency, security, compatibility, maintainability, and so on.
+- Compliance requirements like legal, social, financial, competitive and technological concerns.
+
+Reference architecture or architectural patterns are there to provide standard ways to address repeatable concerns.
+
+- Monolithic
+- Service-oriented
+- Micrsoservices
+- Event-driven
+
+Monolitic applications are generally miserable and I won't labour on them here. I get what's rubbish
+
+Service Oriented Architecture. There's a lot to be said here and I think I'll have to re-visit. 
+
+Microservices is a variant of the Services Oriented Architecture
