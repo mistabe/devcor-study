@@ -228,4 +228,48 @@ Monolitic applications are generally miserable and I won't labour on them here. 
 
 Service Oriented Architecture. There's a lot to be said here and I think I'll have to re-visit. 
 
-Microservices is a variant of the Services Oriented Architecture
+Microservices is a variant of the Services Oriented Architecture that's refined to the point where each service is doing just one thing, whereas SOA is bigger and more complicated per instance. 
+Common use case is Cloud Native and container based - almost by virtue of the description mandates a container orchestration solution.
+
+Benefits are modularity, ease of scalability, distributed development and unique/most appropriate software language/platforms etc for each service if neccesary.
+
+Downsides are the complexity of the orchestration and latency due to the increased services that each reuest must touch.
+
+Event Driven Architecture is based on the production, consumption and reaction to events.
+
+Events are defined as a significant change in state which is asynchronous in nature.
+Azure Event Hub, Azure Event Grid and Azure Service Bus are all features of the Azure platform that can provide services that [deal with messages](https://docs.microsoft.com/en-us/azure/event-grid/compare-messaging-services) in the way described.
+
+Two topologies exit, the Event Mediator and the Event Broker. The mediator topology is commonly used when there is a need to orchestrate multiple steps within an event through a central mediator, whereas the broker topology is used to chain events and responses together directly.
+Higly complicated to implement and maintain, but is highy scalable due to it's distributed and loosely coupled nature.
+
+### 1.10 Utilize advanced version control operations with Git
+
+Git is a distributed version control system.
+
+- Working directory
+- Staging area
+- Local repository
+
+`git add` , `git commit` , `git log` , `git cat-file`
+
+Are all useful commands working with your local respository.
+
+`git branch` , `git checkout` , `git show` , `git merge` , `git rebase`
+
+Are useful commands when working with branches
+
+`git commit` , `git stash` , `git reset` , `git status`
+
+### 1.11 Explain the concepts of release packaging and dependency management
+
+### 1.12 Construct a sequence diagram that includes API calls
+
+[diagrams.net](https://app.diagrams.net/) is our friend here.
+Examples are published [here](https://github.com/jgraph/drawio-diagrams) on GitHub
+
+[Unified Modelling Language](https://en.wikipedia.org/wiki/Unified_Modeling_Language) visualises the design of systems and templates are available directly in diagrams.net
+
+The vertical axis represents time progressing down the page
+
+You can use a tool which uses a textual notation to describe UML models called [PlantUML](https://plantuml.com/sequence-diagram)
