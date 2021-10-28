@@ -153,7 +153,7 @@ Even with the above you can improve upon it as REST APIs have a way to simplify 
 
 Example:
 
-```
+```http
 Link: <https://www.bob.com/events?offset=100&limit=20>; rel="self",
 <https://www.bob.com/events?offset=80&limit=20>; rel="prev",
 <https://www.bob.com/events?offset=120&limit=20>; rel="next",
@@ -163,7 +163,7 @@ Link: <https://www.bob.com/events?offset=100&limit=20>; rel="self",
 
 You can also incllude metadata directly in the REST API response body.
 
-```
+```python
 "paging": {
     "offset": 6,
     "limit": 2,
@@ -184,3 +184,32 @@ You can also incllude metadata directly in the REST API response body.
 
 ### 2.5 Describe the steps in the OAuth2 three legged authorization code grant flow
 
+In traditional circumstances with client/server apps, the client authenticates with the resource owner's creds when it requests a restricted resource on a server.
+When a third party app requires access to resources, the resource owner has to share creds, which creates problematic issues.
+
+OAuth addreseses these shortcomings and introduces an authorization layer and seperating the roles of the client and resource owner
+
+OAuth2 defines four roles;
+
+- Resource Owner
+- Client
+- Resource Server
+- Authorization Server
+
+OAuth is deisgned for use with HTTP and specifies several different _authorization grant_ types to address different use cases and device capcabilities.
+
+There's two legged and three legged variants referring to the numbers of parties involved in the authentication process. The two legged varient doesn't involve user intereaction and is typically used for machine to machine authorization.
+
+To be able to use OAuth, the client application must first be regsitered with the authorization provider. This in Azure is _App Registrations_ The auth provider may request information like the client application name, description, icon, and the application redirect URL for the actual security.
+
+Azure will issue GUIDs for Application (Client) ID, Object ID and Directory (Tenant) ID. The client ID is used by the service API (!?) to identify the application (like a username) and the client secret is used to authenticate the idenitity of the application and must be kept private between the client application and the API.
+
+- Authorization Code grant - Three legged
+- Client Credentials grant - Two legged
+- Refresh Token grant - Refresh token without reauth
+- Devide Code grant - Used on browserless devices
+- Password credentials grant - (legacy) the users creds are exchanged for an access token
+
+**Authorization Code Grant Flow**
+
+[MS Docs](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow) describe the flow well
