@@ -10,15 +10,31 @@ You'll also need an account at the [Cisco Webex Developer](https://developer.web
 
 ### 3.1 Construct API requests to implement ChatOps with Webex API
 
+Certainly worth reading this before reading the study guide language on this objective.
+<https://developer.webex.com/blog/from-zero-to-webex-chatbot-in-15-minutes-updated-for-2021>
+
+Using Windows you'll need to authenticate your ngrok.exe to the service. 
+
+The response will be stored to a configuration file: C:\Users\<username>/.ngrok2/ngrok.yml
+
+Fire ngrok up from the location of the exe using `./ngrok http 7001 --region=eu` and you'll see; 
+
+
+```text
+ngrok by @inconshreveable                                                                               (Ctrl+C to quit)                                                                                                                        Session Status                online                                                                                    Account                       Paul Beyer (Plan: Free)                                                                   Version                       2.3.40                                                                                    Region                        Europe (eu)                                                                               Web Interface                 http://127.0.0.1:4040                                                                     Forwarding                    http://<UID>.eu.ngrok.io -> http://localhost:7001                           Forwarding                    https://<UID>.eu.ngrok.io -> http://localhost:7001                                                                                                                                                  Connections                   ttl     opn     rt1     rt5     p50     p90                                                                             0       0       0.00    0.00    0.00    0.00      
+```
+
 Webex Teams was renamed to Webex. Brilliant. The API service URLs we'll use will be the new URLs.
 
 I'll correlate as much of this data as possible to using Slack APIs and reference them alongside the Webex APIs.
 
-Chatbots help operations by simulating conversations. Chatbots can respond to question or even start automated workflows.
+Chatbots help operations by simulating conversations. Chatbots can respond to question or even start automated workflows. Chatbots can be used as the follows; 
 
 - Notifiers
 - Controllers
 - Personal Assistants
+
+Have a read of this URL <https://developer.webex.com/docs/bots>
 
 With Webex chatbots, the chatbot needs to listen to a webhook URL for Webex notifications
 [Slack bot link](https://api.slack.com/bot-users)
@@ -33,6 +49,8 @@ Practically speaking it's a small web server that is serving HTTP requests and h
 Your webhook [has to be registered](https://developer.webex.com/docs/api/v1/webhooks/create-a-webhook) with the API Call
 
 Webhooks that are created have to be registered, documnetation on how to do that [here](https://developer.webex.com/docs/api/v1/webhooks/create-a-webhook)
+
+Note: In group rooms, bots only have access to messages in which they are mentioned. This means that webhooks would only be called when the bot is specifically mentioned in a room (with @).
 
 ### 3.2 Construct API requests to create and delete objects using Firepower Device Management (FDM)
 
@@ -98,3 +116,13 @@ To enable the location API;
 - Configure and host your HTTP server to receive JSON objects
 
 Validator is used by Meraki to validate your application: on the first connection, it will check that the server returns the organisation specific validator string as a response, which will verify the orgnisations identity. The Meraki cloud will then begin performing JSON posts.
+
+### 3.4 Construct API calls to retrieve data from Intersight
+
+### 3.5 Construct a Python script using the UCS APIs to provision a new UCS server given a template
+
+### 3.6 Construct a Python script using the Cisco DNA center APIs to retriev and display wireless health information
+
+### 3.7 Describe the capabailities of AppDynamics when instrumenting an application
+
+### 3.8 Describe steps to build a custom dashboard to present data collected from Cisco APIs
