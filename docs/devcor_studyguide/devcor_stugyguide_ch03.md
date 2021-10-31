@@ -13,16 +13,29 @@ You'll also need an account at the [Cisco Webex Developer](https://developer.web
 Certainly worth reading this before reading the study guide language on this objective.
 <https://developer.webex.com/blog/from-zero-to-webex-chatbot-in-15-minutes-updated-for-2021>
 
-Using Windows you'll need to authenticate your ngrok.exe to the service. 
+Also worth getting used to the Webex Web UI. As a person that has never used Webex's current offering in an organisation, this means I have to get used to it's naming scheme and feature structure.
 
-The response will be stored to a configuration file: C:\Users\<username>/.ngrok2/ngrok.yml
+To allow your ChatOps code to work, you'll need to be either running your code on a publicly accessible service and URL, or you can spin up ngrok to facilitate testing from your local machine in a "firewall friendly" manner. Anyone that operates network security policy will likely _not_ call this "firewall friendly". You know who you are.
 
-Fire ngrok up from the location of the exe using `./ngrok http 7001 --region=eu` and you'll see; 
+Sign up for an account at [Ngrok](https://ngrok.com/)
+
+Download the ngrok executable to your Windows workstation
+
+You'll need to authenticate your ngrok.exe to the service.
+In the ngrok [Setup and Installation](https://dashboard.ngrok.com/get-started/setup) page you'll be shown how to authenticate for the first time. You'll be given a pre-formed command with your personal auth token similar to:
+
+`./ngrok authtoken 2088LH...UEJTU`
+
+The response will be stored to a configuration file: `C:\Users\<username>/.ngrok2/ngrok.yml`
+
+Fire ngrok up from the location of the exe using `./ngrok http 7001 --region=eu` with "7001" being the port that the application will send data to your local app on for you and you'll see; 
 
 
 ```text
 ngrok by @inconshreveable                                                                               (Ctrl+C to quit)                                                                                                                        Session Status                online                                                                                    Account                       Paul Beyer (Plan: Free)                                                                   Version                       2.3.40                                                                                    Region                        Europe (eu)                                                                               Web Interface                 http://127.0.0.1:4040                                                                     Forwarding                    http://<UID>.eu.ngrok.io -> http://localhost:7001                           Forwarding                    https://<UID>.eu.ngrok.io -> http://localhost:7001                                                                                                                                                  Connections                   ttl     opn     rt1     rt5     p50     p90                                                                             0       0       0.00    0.00    0.00    0.00      
 ```
+
+INSERT NGROK DIAGRAM HERE
 
 Webex Teams was renamed to Webex. Brilliant. The API service URLs we'll use will be the new URLs.
 
@@ -36,17 +49,101 @@ Chatbots help operations by simulating conversations. Chatbots can respond to qu
 
 Have a read of this URL <https://developer.webex.com/docs/bots>
 
-With Webex chatbots, the chatbot needs to listen to a webhook URL for Webex notifications
-[Slack bot link](https://api.slack.com/bot-users)
-Practically speaking it's a small web server that is serving HTTP requests and has to be publicly available.
+With Webex chatbots, the chatbot needs to listen to a webhook URL for Webex notifications. 
+Obligatory alternate Slack documentation [here](https://api.slack.com/bot-users).
+Practically speaking it's a small web server - read, "the Python Flask module" - that is serving HTTP requests and has to be publicly available using Ngrok for testing or hosted on a service of your choosing.
 
-- Webex access token
+- Webex access token (gleaned from your developer portal)
 - Webhook listener (Python Flask module)
-- HTTP Library
+- HTTP Library (Python requests module)
 - Authetication Credentials (Meraki API key for example)
 
-[Ngrok](https://ngrok.com/) solves(!) the problem of publicly reachable URLs for a private location.
 Your webhook [has to be registered](https://developer.webex.com/docs/api/v1/webhooks/create-a-webhook) with the API Call
+
+This will be the first request to "implement ChatOps with Webex API"
+
+We'll register, show and delete webhooks.
+
+I'm assuming you've got Python for Windows installed, created a Python virtual environment using Python for Windows and you've activated that virtual environemnt and used pip to install requests and flask
+If not, read [here](https:\\insertguide.com) for a quick start. Perhaps you're even using [VS Code](https://code.visualstudio.com/) too, which would be lovely.
+
+We'll build the code in parts.
+
+```python
+import requests
+
+base_url = 'https://webexapis.com/v1'
+#Use your actual bot access token below
+bearer_token = 'ZDZkOT..bb8cd''
+```
+
+Create the variable "headers" and pass it a Python dictionary which will contain the headers for the payload the "authorization" key uses and [F-String](https://docs.python.org/3/tutorial/inputoutput.html#formatted-string-literals) to build the value.
+
+```python
+headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": f"Bearer {bearer_token}",
+}
+```
+
+Create the variable "webhook" and pass it a Python dictionary with all the attributes required of it. Ensure your targetUrl value is your actual ngrok URL, using either the HTTPS or HTTP protocol both seem fine given both are created by ngrok and Webex doesn't care, also ensure the /webhooks path matches your flask configuration so you'll need `@app.route('/webhooks', methods=['POST'])` if you want the two to match, or you _could_, not saying you should remove the webhooks path both the WebEx webhook and Flask configuration and roll like that instead.
+
+```python
+webhook = {
+    "name": "Bobs bitch tits",
+    "targetUrl": "http://<yourngrokGUID>.ngrok.io/webhooks",
+    "resource": "messages",
+    "event": "created",
+}
+```
+
+Read current webhooks and optionally display them
+
+```python
+response = requests.get(f"{base_url}/webhooks", headers=headers, json=webhook)
+response.raise_for_status()
+response.content()
+```
+
+Based on retrieving the webhooks to the variable "response", delete the webooks one by one
+
+```python
+response = requests.get(f"{base_url}/webhooks", headers=headers, json=webhook)
+response.raise_for_status()
+
+for item in response.json()["items"]:
+    print (f'Deleting webhook \"{item["name"]}\"...')
+    complete_delete = requests.delete(f'{base_url}/webhooks/{item["id"]}', headers=headers)
+    complete_delete.raise_for_status()
+    print (complete_delete.status_code)
+```
+
+Finally create a webhook. Note the use of the HTTP POST method to achieve it
+
+```python
+response = requests.post(f"{base_url}/webhooks", headers=headers, json=webhook)
+response.raise_for_status()
+```
+
+I've oberserved the code makes use of the requests module's "raise_for_status" quite often.
+Useful to know that the `.raise_for_status()` method only plays a part when the response is an error of some kind not in the 2xx HTTP response code range.
+
+You could use `.status_code()`, which is kind and gives you the code regardless of which code number it is in the successes or failures. Then should you be working programtically with that response gives you more work to do if the response is a successful one. 
+
+I choose to remember Try/Except blocks as "teef" like an illiterate way of saying "teeth" because there's always the optional else and finally clauses available to you.
+
+```python
+url = "https://www.google.com"
+try:
+        response = requests.get(url)
+        # If the response was successful, no Exception will be raised
+        response.raise_for_status()
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')  # Python 3.6
+    except Exception as err:
+        print(f'Other error occurred: {err}')  # Python 3.6
+```
 
 Webhooks that are created have to be registered, documnetation on how to do that [here](https://developer.webex.com/docs/api/v1/webhooks/create-a-webhook)
 
