@@ -129,20 +129,23 @@ response.raise_for_status()
 I've oberserved the code makes use of the requests module's "raise_for_status" quite often.
 Useful to know that the `.raise_for_status()` method only plays a part when the response is an error of some kind not in the 2xx HTTP response code range.
 
-You could use `.status_code()`, which is kind and gives you the code regardless of which code number it is in the successes or failures. Then should you be working programtically with that response gives you more work to do if the response is a successful one. 
+You could use `.status_code()`, which is kind and gives you the code regardless of which code number it is in the successes or failures. Then should you be working programtically with that response gives you more work to do if the response is a successful one.
 
 I choose to remember Try/Except blocks as "teef" like an illiterate way of saying "teeth" because there's always the optional else and finally clauses available to you.
+Exceptions can - and should - be raised in a more specific to less specific descending order.
 
 ```python
-url = "https://www.google.com"
+import requests 
+
+url = "https://www.cisco.com"
 try:
-        response = requests.get(url)
-        # If the response was successful, no Exception will be raised
-        response.raise_for_status()
-    except HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')  # Python 3.6
-    except Exception as err:
-        print(f'Other error occurred: {err}')  # Python 3.6
+    response = requests.get(url)
+    # If the response was successful, no Exception will be raised
+    response.raise_for_status()
+except requests.exceptions.HTTPError as http_err:
+    print(f'HTTP error occurred: {http_err}')
+except Exception as err:
+    print(f'Other error occurred: {err}')
 ```
 
 Webhooks that are created have to be registered, documnetation on how to do that [here](https://developer.webex.com/docs/api/v1/webhooks/create-a-webhook)
@@ -151,13 +154,39 @@ Note: In group rooms, bots only have access to messages in which they are mentio
 
 ### 3.2 Construct API requests to create and delete objects using Firepower Device Management (FDM)
 
+So, I'm assuming the branding team mean [Cisco Firepower Device Manager](https://www.cisco.com/c/en/us/products/security/security-management/firepower-device-manager.html). As it says in the sparse URL, FDM "Manages a small-scale Firepower next-generation firewall (NGFW) deployment locally, using the web".
+
+This use case is pretty niche. FDM seems to sit awkwardly between the legacy but widely deployed ASA code and the modern FTD code. [This dude](https://community.cisco.com/t5/network-security/ftd-vs-fmc/td-p/3017936) seems to suggest FDM is only for lower end 5500-X series appliances and certainly not for FP(Firepower) series hardware.
+
+Whilst seemingly not part of this objective - setting up ASA APIs is [here](https://www.cisco.com/c/en/us/td/docs/security/asa/api/qsg-asa-api.html)
+Setting up FTD APIs is [here](https://www.cisco.com/c/en/us/td/docs/security/firepower/ftd-api/guide/ftd-rest-api.html)
+
+Now, having reviewing the example code from the DEVCOR Study guide, I'm dissapointed to find this 
+
+```python
+    # Settings for the "Firepower Threat Defense REST API" DevNet sandbox
+    fdm=FDM_API("10.10.20.65", "admin", "Cisco1234")
+```
+
+So we've transposed language. I've spent time unpicking what the hell FDM is and it seems that actually the objective relies on the  Firepower Threat Defense REST API DevNet sandbox. This is annoying from my perspective having gone down the FDM rabbit hole only to find out we are really talking about FTD.
+
 - Obtain an access token to auth your API calls
 - Build a JSON payload if needed (unless you're reading data)
 - Send a request to the FDM device using one of the HTTP methods and the specific resource URL
 - Consume the returned JSON response
 - If you make conifugration changes, deploy the changes
 
-FDM is a component of FTD - perhaps the replacement to ASDM for ASA.
+Getting an access token should result in the following reponse
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI...553sTnbJUm329A",
+    "expires_in": 1800,
+    "token_type": "Bearer",
+    "refresh_token": "ehbGciOiJIUzI1NiJ...CyfwqwYbNEgIlg",
+    "refresh_expires_in": 2400
+}
+```
 
 ### 3.3 Construct API requests using the Meraki platform to accomplish these tasks
 
@@ -186,7 +215,7 @@ There are still two versions of the API. The two URLs are:
 https://api.meraki.com/api/v0
 https://api.meraki.com/api/v1
 
-Note the suffix being v0 and v1. 
+Note the suffix being v0 and v1.
 
 API calls are limited to five calls per second, per organisation.
 
