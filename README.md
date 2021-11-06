@@ -20,8 +20,6 @@ Repo containing all the code and docs I've used to pass the Cisco DEVCOR Exam
 
 1.6 Evaluate an application design and implementation considering observability
 
-1.7 Diagnose problems with an application given logs related to an event
-
 1.8 Evaluate choice of database types with respect to application requirements (such as relational, document, graph, columnar, and Time Series)
 
 1.9 Explain architectural patterns (monolithic, services oriented, microservices, and event driven)
@@ -38,6 +36,14 @@ Repo containing all the code and docs I've used to pass the Cisco DEVCOR Exam
 
 4.3 Describe the benefits of continuous testing and static code analysis in a CI pipeline
 
+4.5 Describe the tenets of the "12-factor app"
+
+4.6 Describe an effective logging strategy for an application
+
+4.7 Explain data privacy concerns related to storage and transmission of data
+
+4.8 Identify the secret storage approach relevant to a given scenario
+
 4.11 Describe how end-to-end encryption principles apply to APIs
 
 5.1 Explain considerations of model-driven telemetry (including data consumption and data storage)
@@ -47,6 +53,8 @@ Repo containing all the code and docs I've used to pass the Cisco DEVCOR Exam
 5.5 Describe how to host an application on a network device (including Catalyst 9000 and Cisco IOx-enabled devices)
 
 ## Things you must be able to do
+
+1.7 Diagnose problems with an application given logs related to an event
 
 1.10 Utilize advanced version control operations with Git
 
@@ -84,14 +92,6 @@ Repo containing all the code and docs I've used to pass the Cisco DEVCOR Exam
 4.2 Integrate an application into a prebuilt CD environment leveraging Docker and Kubernetes
 
 4.4 Utilize Docker to containerize an application
-
-4.5 Describe the tenets of the "12-factor app"
-
-4.6 Describe an effective logging strategy for an application
-
-4.7 Explain data privacy concerns related to storage and transmission of data
-
-4.8 Identify the secret storage approach relevant to a given scenario
 
 4.9 Configure application specific SSL certificates
 
