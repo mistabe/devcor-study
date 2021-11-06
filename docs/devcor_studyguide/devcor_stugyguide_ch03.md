@@ -154,6 +154,8 @@ Note: In group rooms, bots only have access to messages in which they are mentio
 
 ### 3.2 Construct API requests to create and delete objects using Firepower Device Management (FDM)
 
+Before starting this exercise, do yourself a favour and spin up the Firepower Threat Defense REST API sandbox in devnetsandbox.cisco.com. It takes approx 10mins to complete, so by the time you've oriented yourself with the details below, it'll be ready to use and available for a 2 hour duration.
+
 So, I'm assuming the branding team mean [Cisco Firepower Device Manager](https://www.cisco.com/c/en/us/products/security/security-management/firepower-device-manager.html). As it says in the sparse URL, FDM "Manages a small-scale Firepower next-generation firewall (NGFW) deployment locally, using the web".
 
 This use case is pretty niche. FDM seems to sit awkwardly between the legacy but widely deployed ASA code and the modern FTD code. [This dude](https://community.cisco.com/t5/network-security/ftd-vs-fmc/td-p/3017936) seems to suggest FDM is only for lower end 5500-X series appliances and certainly not for FP(Firepower) series hardware.
@@ -168,7 +170,7 @@ Now, having reviewing the example code from the DEVCOR Study guide, I'm dissapoi
     fdm=FDM_API("10.10.20.65", "admin", "Cisco1234")
 ```
 
-So we've transposed language. I've spent time unpicking what the hell FDM is and it seems that actually the objective relies on the  Firepower Threat Defense REST API DevNet sandbox. This is annoying from my perspective having gone down the FDM rabbit hole only to find out we are really talking about FTD.
+So we've transposed language. I've spent time unpicking what the hell FDM is and it seems that actually the objective relies on the Firepower Threat Defense REST API DevNet sandbox. This is annoying from my perspective having read the guide and gone down the FDM rabbit hole only to find out we are really talking about FTD.
 
 - Obtain an access token to auth your API calls
 - Build a JSON payload if needed (unless you're reading data)
@@ -176,7 +178,10 @@ So we've transposed language. I've spent time unpicking what the hell FDM is and
 - Consume the returned JSON response
 - If you make conifugration changes, deploy the changes
 
-Getting an access token should result in the following reponse
+Obtaining an access token in the example includes baked in credentials for "admin" or more to the point no guidance on using a secret store to leverage for secret management. I understand this is for facilitating the learning objective, but doesn't feel right, so we need to go on a diversion on secret management.
+
+
+Getting an access token should result in the following reponse:
 
 ```json
 {
@@ -189,6 +194,9 @@ Getting an access token should result in the following reponse
 ```
 
 ### 3.3 Construct API requests using the Meraki platform to accomplish these tasks
+
+You will need the "Meraki Enterprise" Devnet Sandbox for this objective. 
+The Meraki Always-On sandbox is read only and won't cut it to make a useful time spent with the codes and tasks you need to complete. With that in mind, go straight to the [Sandbox Labs](https://devnetsandbox.cisco.com/RM/Topology) and reserve a sandbox for a period of time that works for you in anticipation of the following work.
 
 - Add new organizations
 - Provisioning thousands of new sites in minutes with an automation script
