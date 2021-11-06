@@ -106,9 +106,9 @@ Repo containing all the code and docs I've used to pass the Cisco DEVCOR Exam
 
 ## Approach
 
-I utilise the Pomodoro Technique for all learning. It's critical to manage your energy and not "piss in the wind" as they say with your attention and mental energy.
+I utilise the Pomodoro Technique for learning but also for working at home where, in contrast to the office, it's likely you could sit in front of a screen for hours uninteruppted, until you're hungry or need a comfort break. It's critical to manage your energy and not "piss in the wind" as they say with your attention and mental energy.
 
-Certainly reccommend learning Python before starting the DEV*** certification paths. It's certainly helped me to have gone through the PCEP and PCAP certification process before.
+Certainly reccommend learning Python before starting the DEV*** certification paths. It's helped me to have gone through the PCEP and PCAP certification process before starting DEVCOR.
 
 <https://pythoninstitute.org/certification/pcep-certification-entry-level/>
 
