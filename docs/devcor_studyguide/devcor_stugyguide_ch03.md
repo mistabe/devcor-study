@@ -28,8 +28,7 @@ In the ngrok [Setup and Installation](https://dashboard.ngrok.com/get-started/se
 
 The response will be stored to a configuration file: `C:\Users\<username>/.ngrok2/ngrok.yml`
 
-Fire ngrok up from the location of the exe using `./ngrok http 7001 --region=eu` with "7001" being the port that the application will send data to your local app on for you and you'll see; 
-
+Fire ngrok up from the location of the exe using `./ngrok http 7001 --region=eu` with "7001" being the port that the application will send data to your local app on for you and you'll see;
 
 ```text
 ngrok by @inconshreveable                                                                               (Ctrl+C to quit)                                                                                                                        Session Status                online                                                                                    Account                       Paul Beyer (Plan: Free)                                                                   Version                       2.3.40                                                                                    Region                        Europe (eu)                                                                               Web Interface                 http://127.0.0.1:4040                                                                     Forwarding                    http://<UID>.eu.ngrok.io -> http://localhost:7001                           Forwarding                    https://<UID>.eu.ngrok.io -> http://localhost:7001                                                                                                                                                  Connections                   ttl     opn     rt1     rt5     p50     p90                                                                             0       0       0.00    0.00    0.00    0.00      
@@ -41,7 +40,7 @@ Webex Teams was renamed to Webex. Brilliant. The API service URLs we'll use will
 
 I'll correlate as much of this data as possible to using Slack APIs and reference them alongside the Webex APIs.
 
-Chatbots help operations by simulating conversations. Chatbots can respond to question or even start automated workflows. Chatbots can be used as the follows; 
+Chatbots help operations by simulating conversations. Chatbots can respond to question or even start automated workflows. Chatbots can be used as the follows;
 
 - Notifiers
 - Controllers
@@ -49,7 +48,7 @@ Chatbots help operations by simulating conversations. Chatbots can respond to qu
 
 Have a read of this URL <https://developer.webex.com/docs/bots>
 
-With Webex chatbots, the chatbot needs to listen to a webhook URL for Webex notifications. 
+With Webex chatbots, the chatbot needs to listen to a webhook URL for Webex notifications.
 Obligatory alternate Slack documentation [here](https://api.slack.com/bot-users).
 Practically speaking it's a small web server - read, "the Python Flask module" - that is serving HTTP requests and has to be publicly available using Ngrok for testing or hosted on a service of your choosing.
 
@@ -163,7 +162,7 @@ This use case is pretty niche. FDM seems to sit awkwardly between the legacy but
 Whilst seemingly not part of this objective - setting up ASA APIs is [here](https://www.cisco.com/c/en/us/td/docs/security/asa/api/qsg-asa-api.html)
 Setting up FTD APIs is [here](https://www.cisco.com/c/en/us/td/docs/security/firepower/ftd-api/guide/ftd-rest-api.html)
 
-Now, having reviewing the example code from the DEVCOR Study guide, I'm dissapointed to find this 
+Now, having reviewing the example code from the DEVCOR Study guide, I'm dissapointed to find this
 
 ```python
     # Settings for the "Firepower Threat Defense REST API" DevNet sandbox
@@ -180,7 +179,6 @@ So we've transposed language. I've spent time unpicking what the hell FDM is and
 
 Obtaining an access token in the example includes baked in credentials for "admin" or more to the point no guidance on using a secret store to leverage for secret management. I understand this is for facilitating the learning objective, but doesn't feel right, so we need to go on a diversion on secret management.
 
-
 Getting an access token should result in the following reponse:
 
 ```json
@@ -195,7 +193,7 @@ Getting an access token should result in the following reponse:
 
 ### 3.3 Construct API requests using the Meraki platform to accomplish these tasks
 
-You will need the "Meraki Enterprise" Devnet Sandbox for this objective. 
+You will need the "Meraki Enterprise" Devnet Sandbox for this objective.
 The Meraki Always-On sandbox is read only and won't cut it to make a useful time spent with the codes and tasks you need to complete. With that in mind, go straight to the [Sandbox Labs](https://devnetsandbox.cisco.com/RM/Topology) and reserve a sandbox for a period of time that works for you in anticipation of the following work.
 
 - Add new organizations
@@ -220,8 +218,8 @@ To gain API access to Meraki;
 That's all lovely, but what you really want is the [Meraki Always-On DevNet sandbox](https://devnetsandbox.cisco.com/RM/Topology)
 
 There are still two versions of the API. The two URLs are:
-https://api.meraki.com/api/v0
-https://api.meraki.com/api/v1
+<https://api.meraki.com/api/v0>
+<https://api.meraki.com/api/v1>
 
 Note the suffix being v0 and v1.
 
@@ -245,7 +243,7 @@ To enable the location API;
 - Open the [dashboard.meraki.com](https://dashboard.meraki.com/) URL
 - Navigate to Organization | General menu
 - In the "Location and scanning" section, set the Scanning API dropdown box to "Scanning API enabled".
-- Record the validator string. 
+- Record the validator string.
 - Specify a post URL, authentication secret, location API version, and radio type.
 - Configure and host your HTTP server to receive JSON objects
 
@@ -257,6 +255,33 @@ Validator is used by Meraki to validate your application: on the first connectio
 
 ### 3.6 Construct a Python script using the Cisco DNA center APIs to retriev and display wireless health information
 
-### 3.7 Describe the capabailities of AppDynamics when instrumenting an application
+### 3.7 Describe the capabilities of AppDynamics when instrumenting an application
+
+AppDynamics intends to resovle the old siloed, per resource monitoring.
+
+It consists of Agents and Controllers.
+
+Agents monitor every line of code with UIDs assigned to every method call and every request header. Allowing tracing of every transaction from start to finish.
+
+Agents report back to the controller which aggregates all this data in a single interface.
+
+Dynamic topology maps are automaically created and are assigned baselines which can the be judged from a performance perspective.
+
+When those performance thresholds are breached, AppDynamics triggers diagnostic actions and looks for a root cause.
+
+Platform and Agent side APIs are available to extend various parts of the platform.
+
+- Controller APIs
+- Analytics Events API
+- Standalone Machine Agent APIs
+- Database Agent APIs
+- Application Agent Instrumentation APIs
+- Cloud Connector API
 
 ### 3.8 Describe steps to build a custom dashboard to present data collected from Cisco APIs
+
+- Decide on the data that's useful to present
+- Research how to make API calls to the service that presents the data of interest
+- Understand each APIs authentication methods
+- Write code - likely using Python requests module and process and store if needed
+- Present the data in a web framework - likely Flask.
