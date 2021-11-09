@@ -128,6 +128,8 @@ A [methodology](https://12factor.net/) for building SaaS applications
 
 ### 4.6 Describe an effective logging strategy for an application
 
+[A very in depth article](https://medium.com/@vagrantdev/distributed-logging-best-practices-and-lesson-learned-d52143fae266) from someone on the frontline at Twitter, but also a slightly lighter article and more pertinent to the learning goal <https://dzone.com/articles/microservices-logging-best-practices>
+
 Example of a code snippet which logs to files
 
 ```python
@@ -165,9 +167,49 @@ Pick a single source for the log’s time (for example, add the aggregator’s t
 - Indexing (optional)
 - Alerting (optional)
 
+I'm unable to find a source for these best practices, but here goes;
+
+- Aggregate system, database, event and "other" logs aswell.
+- Generate a _Correlation ID_ when making the first microservice call. Use the ID to filter logs and quickly trace application flow
+- Different sources may have different log formats. Transform them all and make them consistent before aggregating.
+- Pick a single time source (the aggregator) for the logs time.
+- Include details and context in logs.
+- In case logging services fail, keep a local log/cache until they are back up.
+
 ### 4.7 Explain data privacy concerns related to storage and transmission of data
 
+[HIPAA](https://www.proofpoint.com/uk/threat-reference/hipaa-compliance), [ECPA](https://en.wikipedia.org/wiki/Electronic_Communications_Privacy_Act), [COPPA](https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act) and [GDPR](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation) are laws that govern specific types of data.
+
+GDPR six principles
+
+- Lawfulness, fairness and transparancy
+- Purpose limitation
+- Data Minimization
+- Accuracy
+- Storage limitation
+- Integrity and confidentiality
+
+GDPR demands;
+
+PII is removed via anonimisation or pseudoanonimisation (deidentification). The latter does retain some a non-PII UID that can then rehydrate PII if required.
+
+Data-in-transit and data-at-rest protection
+
 ### 4.8 Identify the secret storage approach relevant to a given scenario
+
+Secret storage in code is best(!) used when testing.
+
+Secret storage in environment variables is the minimum viable product in real life
+
+```python
+ACCESS_USER=os.environ["ENV_ACCESS_USER"]
+ACCESS_SECRET=os.environ["ENV_ACCESS_SECRET"]
+result= API_call (url, user=ACCESS_USER, password=ACCESS_SECRET)
+```
+
+Secret Managers like Hashicorp Vault and Ansible Vault are your next most evolved step.
+
+Finally Cloud-based password managers like AWS IAM or Azure KeyVault makes the most sense for distributed applications, but comes with the most complexity.
 
 ### 4.9 Configure application-specific SSL certificates
 
@@ -184,25 +226,25 @@ The most common issues with certificates
 
 For the context of the exam - currently Nov 2021, the _older_ OWASP Top 10 is referred to.
 
-A1:2017-Injection
+- A1:2017-Injection
 Application functions related to authentication and session management are often implemented
 incorrectly, allowing attackers to compromise passwords, keys, or session tokens, or to exploit
 other implementation flaws to assume other users’ identities temporarily or permanently.
-A2:2017-Broken Authentication
+- A2:2017-Broken Authentication
 Many web applications and APIs do not properly protect sensitive data, such as financial,
 healthcare, and PII. Attackers may steal or modify such weakly protected data to conduct credit
 card fraud, identity theft, or other crimes. Sensitive data may be compromised without extra
 protection, such as encryption at rest or in transit, and requires special precautions when
 exchanged with the browser.
-A3:2017-Sensitive Data Exposure
+- A3:2017-Sensitive Data Exposure
 Many older or poorly configured XML processors evaluate external entity references within XML
 documents. External entities can be used to disclose internal files using the file URI handler,
 internal file shares, internal port scanning, remote code execution, and denial of service attacks.
-A4:2017-XML External Entities (XXE)
+- A4:2017-XML External Entities (XXE)
 Restrictions on what authenticated users are allowed to do are often not properly enforced.
 Attackers can exploit these flaws to access unauthorized functionality and/or data, such as access
 other users' accounts, view sensitive files, modify other users’ data, change access rights, etc.
-A5:2017-Broken Access Control
+- A5:2017-Broken Access Control
 Security misconfiguration is the most commonly seen issue. This is commonly a result of insecure
 default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured
 HTTP headers, and verbose error messages containing sensitive information. Not only must all
@@ -213,16 +255,16 @@ proper validation or escaping, or updates an existing web page with user-supplie
 browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the
 victim’s browser which can hijack user sessions, deface web sites, or redirect the user to
 malicious sites.
-A7:2017-Cross-Site Scripting (XSS)
+- A7:2017-Cross-Site Scripting (XSS)
 Insecure deserialization often leads to remote code execution. Even if deserialization flaws do not
 result in remote code execution, they can be used to perform attacks, including replay attacks,
 injection attacks, and privilege escalation attacks.
-A8:2017-Insecure Deserialization
+- A8:2017-Insecure Deserialization
 Components, such as libraries, frameworks, and other software modules, run with the same
 privileges as the application. If a vulnerable component is exploited, such an attack can facilitate
 serious data loss or server takeover. Applications and APIs using components with known
 vulnerabilities may undermine application defenses and enable various attacks and impacts.
-A9:2017-Using Components with Known Vulnerabilities
+- A9:2017-Using Components with Known Vulnerabilities
 Insufficient logging and monitoring, coupled with missing or ineffective integration with incident
 response, allows attackers to further attack systems, maintain persistence, pivot to more systems,
 and tamper, extract, or destroy data. Most breach studies show time to detect a breach is over
@@ -231,3 +273,16 @@ and tamper, extract, or destroy data. Most breach studies show time to detect a 
 For your information, there is the [current OWASP Top 10](https://owasp.org/www-project-top-ten/) which supercedes the 2017 version.
 
 ### 4.11 Describe how end-to-end encryption principles apply to APIs
+
+For North-South traffic encryption
+
+- TLS or MTLS is popular for API encryption.TLS We're pretty clear about. The Root CA's public cert must be trusted for a random client connection to secure communications to a service which is using a certificate signed by that Root CA or any of its subordniates.
+MTLS introduces the requirement that both sides need to perform that action to authenticate not only the service, but the client connection.
+
+- TLS or IPSec to an API Gateway of NGFW
+
+For East-West traffic encryption
+
+- TLS or MTLS
+- Service mesh segmentation service
+- Dedicated Container Firewall
